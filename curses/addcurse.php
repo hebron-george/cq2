@@ -52,16 +52,15 @@
 		$date = date("Y-m-d H:i:s");
 		$date = date('Y-m-d H:i:s', strtotime($date. " + $days days $hours hours $minutes minutes"));
 
-
-
-
+		$insertStmt = $dbh->prepare("INSERT INTO ".Config::db_table." (curseName, expireDate, user, numShards, crit) VALUES( ?, ?, ?, ?, ?)")
+		;
 		if (strpos($curseType, "Surathli's") !== false)
 		{
+			//Check to see if this user is already in the database with SA
 			$curseName = Config::SA;
-			$stmt = $dbh->prepare("SELECT id FROM ". Config::db_table ." WHERE user= ? AND curseName = ?");
+			$stmt = $dbh->prepare("SELECT id FROM ". Config::db_table ." WHERE user = ? AND curseName = ?");
 			$stmt->bindParam(1, $victim);
 			$stmt->bindParam(2, $curseName);
-
 
 			$stmt->execute();
 
@@ -70,13 +69,9 @@
 				die("This curse exists already. Contact an admin if you want to update or remove this curse: <strong>".$i."</strong>");
 			}
 
-			$stmt = $dbh->prepare("INSERT INTO ".Config::db_table." (curseName, expireDate, user, numShards) VALUES( ?, ?, ?, ?)");
-			$stmt->bindParam(1, $curseName);
-			$stmt->bindParam(2, $date);
-			$stmt->bindParam(3, $victim);
-			$stmt->bindParam(4, $numOfShardsLeft);
-
-			$stmt->execute();
+			//Since the user is not in the database with SA already, add them
+			$myNull = null;
+			$insertStmt->bindParam(5, $myNull);
 
 			$count = $count + 1;
 		}
@@ -84,34 +79,41 @@
 		{
 			$crit = implode(" ", explode(" ", $m[1], -1));
 
-			if ($crit === "" || $victim === "" || $numOfShardsLeft === "" || $days === "" || $hours === "" || $minutes === "")
+			if ($crit === "")
 			{
 				die("There was an error parsing your data :( <br> <strong>Here: </strong>".$i);
 			}
 
-			//Expiration Date (relative to the server's time)
-			$date = date("Y-m-d H:i:s");
-			$date = date('Y-m-d H:i:s', strtotime($date. " + $days days $hours hours $minutes minutes"));
+			//Check to see if this user is already in the database with Meta
+			$curseName = Config::META;
+			$stmt = $dbh->prepare("SELECT id FROM ". Config::db_table ." WHERE user = ? AND curseName = ? AND crit = ?");
+			$stmt->bindParam(1, $victim);
+			$stmt->bindParam(2, $curseName);
+			$stmt->bindParam(3, $crit);
 
-			//Submit to database
-			$con=mysqli_connect(Config::db_host,Config::db_user,Config::db_pass,Config::db_name) or die("fuck");
-			//Check connection
-			if (mysqli_connect_errno($con))
+			$stmt->execute();
+
+			if ($data = $stmt->fetch())
 			{
-			  	echo "Failed to connect to Database.";
-			  	die();
+				die("This curse exists already. Contact an admin if you want to update or remove this curse: <strong>".$i."</strong>");
 			}
 
-			$stmt = "INSERT INTO ".Config::db_table." (curseName, expireDate, user, numShards, crit) VALUES ('".Config::META."', '".$date."', '".$victim."', '".$numOfShardsLeft."', '".$crit."')";
-			echo $stmt;
-			mysqli_query($con, $stmt);
-			mysqli_close($con);
+			$insertStmt->bindParam(5, $crit);
+
 			$count = $count + 1;
 		}
 		else
 		{
 			die("Either the curses you entered weren't Surathli's Anger or there was an issue parsing. :(");
 		}
+
+
+		$insertStmt->bindParam(1, $curseName);
+		$insertStmt->bindParam(2, $date);
+		$insertStmt->bindParam(3, $victim);
+		$insertStmt->bindParam(4, $numOfShardsLeft);
+
+		$insertStmt->execute();
 	}
 
 	echo "Added ".$count." curse(s) successfully!";
