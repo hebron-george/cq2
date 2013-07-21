@@ -28,7 +28,7 @@
 	}
 
 	$width = 1024;
-	$height = 50 * $rows;
+	$height = 20 * $rows;
 	$my_img = imagecreate( $width, $height );
 	$background = imagecolorallocate( $my_img, 0, 0, 0 );
 	$text_colour = imagecolorallocate( $my_img, 255,100,000 );

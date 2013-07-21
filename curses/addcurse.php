@@ -59,7 +59,7 @@
 		{
 			$crit = '0';
 			$curseName = Config::SA;
-			
+
 			$count = $count + 1;
 		}
 		else if (strpos($curseType, "Metamorphosis") !== false)
@@ -110,16 +110,19 @@
 		}
 
 		//Check to see if this user is already in the database
-		$stmt = $dbh->prepare("SELECT id FROM ". Config::db_table ." WHERE user = ? AND curseName = ? AND crit = ?");
-		$stmt->bindParam(1, $victim);
-		$stmt->bindParam(2, $curseName);
-		$stmt->bindParam(3, $crit);
-
-		$stmt->execute();
-
-		if ($data = $stmt->fetch())
+		if ($curseName == "SA")
 		{
-			die("This curse exists already. Contact an admin if you want to update or remove this curse: <strong>".$i."</strong>");
+			//Check if already exists, else add
+			$stmt = $dbh->prepare("SELECT id FROM ". Config::db_table ." WHERE user = ? AND curseName = ?");
+			$stmt->bindParam(1, $victim);
+			$stmt->bindParam(2, $curseName);
+
+			$stmt->execute();
+
+			if ($data = $stmt->fetch())
+			{
+				die("This curse exists already. Contact an admin if you want to update or remove this curse: <strong>".$i."</strong>");
+			}
 		}
 
 		$insertStmt->bindParam(1, $curseName);
