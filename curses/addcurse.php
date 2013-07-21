@@ -9,7 +9,7 @@
 	}
 	else
 	{
-		die("No input. Copy & Paste your SA curses.");
+		die("No input. Copy & Paste your curses.");
 	}
 
 	//Connect to database
@@ -42,6 +42,7 @@
 		$days = $m[4];
 		$hours = $m[5];
 		$minutes = $m[6];
+		$myNull = '0';
 
 		if ($victim === "" || $numOfShardsLeft === "" || $days === "" || $hours === "" || $minutes === "")
 		{
@@ -56,62 +57,76 @@
 		;
 		if (strpos($curseType, "Surathli's") !== false)
 		{
-			//Check to see if this user is already in the database with SA
+			$crit = '0';
 			$curseName = Config::SA;
-			$stmt = $dbh->prepare("SELECT id FROM ". Config::db_table ." WHERE user = ? AND curseName = ?");
-			$stmt->bindParam(1, $victim);
-			$stmt->bindParam(2, $curseName);
-
-			$stmt->execute();
-
-			if ($data = $stmt->fetch())
-			{
-				die("This curse exists already. Contact an admin if you want to update or remove this curse: <strong>".$i."</strong>");
-			}
-
-			//Since the user is not in the database with SA already, add them
-			$myNull = null;
-			$insertStmt->bindParam(5, $myNull);
-
+			
 			$count = $count + 1;
 		}
 		else if (strpos($curseType, "Metamorphosis") !== false)
 		{
 			$crit = implode(" ", explode(" ", $m[1], -1));
+			$curseName = Config::META;
 
 			if ($crit === "")
 			{
 				die("There was an error parsing your data :( <br> <strong>Here: </strong>".$i);
 			}
+			$count = $count + 1;
+		}
+		else if (strpos($curseType, "Doppelganger") !== false)
+		{
+			$crit = implode(" ", explode(" ", $m[1], -1));
+			$curseName = Config::DOPPLE;
 
-			//Check to see if this user is already in the database with Meta
-			$curseName = Config::META;
-			$stmt = $dbh->prepare("SELECT id FROM ". Config::db_table ." WHERE user = ? AND curseName = ? AND crit = ?");
-			$stmt->bindParam(1, $victim);
-			$stmt->bindParam(2, $curseName);
-			$stmt->bindParam(3, $crit);
-
-			$stmt->execute();
-
-			if ($data = $stmt->fetch())
+			if ($crit === "")
 			{
-				die("This curse exists already. Contact an admin if you want to update or remove this curse: <strong>".$i."</strong>");
+				die("There was an error parsing your data :( <br>Here: <strong>".$i."</strong><br>");
 			}
-
-			$insertStmt->bindParam(5, $crit);
-
+			$count = $count + 1;
+		}
+		else if (strpos($curseType, "Jinx") !== false)
+		{
+			$crit = implode(" ", explode(" ", $m[1], -1));
+			$curseName = Config::JINX;
+			if ($crit === "")
+			{
+				die("There was an error parsing your data :( <br>Here: <strong>".$i."</strong><br>");
+			}
+			$count = $count + 1;
+		}
+		else if (strpos($curseType, "Suffocation") != false)
+		{
+			$crit = implode(" ", explode(" ", $m[1], -1));	
+			$curseName = Config::SUFFO;
+			if ($crit === "")
+			{
+				die("There was an error parsing your data :( <br>Here: <strong>".$i."</strong><br>");
+			}		
 			$count = $count + 1;
 		}
 		else
 		{
-			die("Either the curses you entered weren't Surathli's Anger or there was an issue parsing. :(");
+			die("Either the curses you entered weren't real or there was an issue parsing. :(");
 		}
 
+		//Check to see if this user is already in the database
+		$stmt = $dbh->prepare("SELECT id FROM ". Config::db_table ." WHERE user = ? AND curseName = ? AND crit = ?");
+		$stmt->bindParam(1, $victim);
+		$stmt->bindParam(2, $curseName);
+		$stmt->bindParam(3, $crit);
+
+		$stmt->execute();
+
+		if ($data = $stmt->fetch())
+		{
+			die("This curse exists already. Contact an admin if you want to update or remove this curse: <strong>".$i."</strong>");
+		}
 
 		$insertStmt->bindParam(1, $curseName);
 		$insertStmt->bindParam(2, $date);
 		$insertStmt->bindParam(3, $victim);
 		$insertStmt->bindParam(4, $numOfShardsLeft);
+		$insertStmt->bindParam(5, $crit);
 
 		$insertStmt->execute();
 	}
