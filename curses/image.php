@@ -1,47 +1,54 @@
 <?php
 	require('config.php');
 
+
 	//Connect to database
-	$con=mysqli_connect(Config::db_host,Config::db_user,Config::db_pass,Config::db_name) or die("fuck");
-	//Check connection
-	if (mysqli_connect_errno($con))
+	try 
 	{
-	  	echo "Failed to connect to MySQL: " . mysqli_connect_error();
-	  	die();
+		$dbh = new PDO("mysql:host=".Config::db_host.";dbname=".Config::db_name, Config::db_user, Config::db_pass);
 	}
-	
-	/* TODO: Make a loop that updates database here (Robert) */
-	$stmt = "DELETE FORM sa_victims WHERE expireDate < NOW()";
-	mysqli_query($con, $stmt);
-
-	$stmt = "SELECT COUNT(id) FROM sa_victims;";
-	$result = mysqli_query($con, $stmt);
-
-	while($row = mysqli_fetch_array($result))
+	catch(PDOException $e)
 	{
-		$rows = $row['COUNT(id)'];
+		die($e->getMessage());
 	}
 
+	//Remove expired curses
+	$count = $dbh->exec("DELETE FROM victims WHERE expireDate < NOW()"); 
 
-	$width = 600;
+	$stmt = $dbh->prepare("SELECT COUNT(id) FROM victims");
+	$stmt->execute();
+
+	if ($data = $stmt->fetch(PDO::FETCH_LAZY))
+	{
+		$rows = $data['COUNT(id)'];
+		if ($rows == '0')
+		{
+			$rows = 5;
+		}
+	}
+
+	$width = 1024;
 	$height = 50 * $rows;
 	$my_img = imagecreate( $width, $height );
 	$background = imagecolorallocate( $my_img, 0, 0, 0 );
 	$text_colour = imagecolorallocate( $my_img, 255,100,000 );
 	$line_colour = imagecolorallocate( $my_img, 075,075,075 );
 	$Surathli_color = imagecolorallocate( $my_img, 255,100,000);
-	imagestring ($my_img, 5, 10, 0, "Siralim - Surathli's Anger Victims", $Surathli_color);
+	imagestring ($my_img, 5, 10, 0, "Siralim - Curse Victims", $Surathli_color);
 	imagesetthickness ( $my_img, 3 );
 	imageline( $my_img, 10, 18, 380, 18, $line_colour);
 	$desc_color = imagecolorallocate( $my_img, 150,150,150);
 	imagestring( $my_img, 4, 10, 20, "User: Time Left", $desc_color );
 
-	$stmt = "SELECT id, expireDate, user, numShards FROM  sa_victims ORDER BY expireDate DESC";
-	$result = mysqli_query($con, $stmt);
+	$stmt = $dbh->prepare("SELECT id, expireDate, user, numShards, crit, curseName FROM  victims ORDER BY expireDate DESC");
+	$stmt->execute();
+
+	$result = $stmt->fetchAll();
+	//$result = mysqli_query($con, $stmt);
 
 	$victim_buffer = 15;
 	$previousY = 20;
-	while ($row = mysqli_fetch_array($result))
+	foreach ($result as $row)
 	{
 		//$row['id']
 		$user = $row['user'];
@@ -54,8 +61,17 @@
 		$time = $time - (60*60*$hours);
 		$minutes = floor($time/60);
 		$numShards = $row['numShards'];
+		$crit = $row['crit'];
+		$curseName = $row['curseName'];
 
-		imagestring( $my_img, 4, 10, $previousY + $victim_buffer, $user.", ".$numShards." Shard(s): ".$days." days, ".$hours." hours, ".$minutes." minutes.", $text_colour );
+		if ($crit == '0')
+		{
+			imagestring( $my_img, 4, 10, $previousY + $victim_buffer, "(SA) ".$user.", ".$numShards." Shard(s): ".$days." days, ".$hours." hours, ".$minutes." minutes.", $text_colour );
+		}
+		else
+		{
+			imagestring( $my_img, 4, 10, $previousY + $victim_buffer, "(".$curseName.") ".$crit." - ".$user.", ".$numShards." Shard(s): ".$days." days, ".$hours." hours, ".$minutes." minutes.", $text_colour );
+		} 
 		$previousY = $previousY + $victim_buffer;
 	}
 
