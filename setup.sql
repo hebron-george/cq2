@@ -17,6 +17,7 @@ CREATE TABLE reveals
 (
 	id INT AUTO_INCREMENT,
 	user TEXT,
+	list TEXT,
 	submissionDate DATETIME,
 	PRIMARY KEY (id)	
 );

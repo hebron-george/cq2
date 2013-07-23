@@ -13,7 +13,7 @@
 	}
 
 	//Remove expired curses
-	$count = $dbh->exec("DELETE FROM victims WHERE expireDate < NOW()"); 
+	$count = $dbh->exec("DELETE FROM ".Config::victims_table." WHERE expireDate < NOW()"); 
 
 	$stmt = $dbh->prepare("SELECT COUNT(id) FROM victims");
 	$stmt->execute();
@@ -40,7 +40,7 @@
 	$desc_color = imagecolorallocate( $my_img, 150,150,150);
 	imagestring( $my_img, 4, 10, 20, "User: Time Left", $desc_color );
 
-	$stmt = $dbh->prepare("SELECT id, expireDate, user, numShards, crit, curseName FROM  victims ORDER BY expireDate DESC");
+	$stmt = $dbh->prepare("SELECT id, expireDate, user, numShards, crit, curseName FROM ".Config::victims_table." ORDER BY expireDate DESC");
 	$stmt->execute();
 
 	$result = $stmt->fetchAll();

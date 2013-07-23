@@ -22,11 +22,7 @@
 		die($e->getMessage());
 	}
 
-	//Meta Format:
-	//Priest of Light Metamorphosis on Beauregard: Every battle the creature transforms into a 
-	//new version with only 1-60% of its original damage/health. (1 active shards left, 2 days, 11 hours, 04 minutes left, try to remove curse)
-
-	//SA Format:
+	//Sample Curse Format:
 	//Surathli's Anger on Looney: Targeted player will lose 200% more resources, power balance, 
 	//workers and arcane chamber energy when attacked. (1 active shards left, 1 days, 21 hours, 21 minutes left, try to remove curse)
 	$pattern = '/(.+) on(.+):.+\((.+) active shards left, (.+) days, (.+) hours, (.+) minutes left.+\)/';
@@ -53,8 +49,8 @@
 		$date = date("Y-m-d H:i:s");
 		$date = date('Y-m-d H:i:s', strtotime($date. " + $days days $hours hours $minutes minutes"));
 
-		$insertStmt = $dbh->prepare("INSERT INTO ".Config::db_table." (curseName, expireDate, user, numShards, crit) VALUES( ?, ?, ?, ?, ?)")
-		;
+		$insertStmt = $dbh->prepare("INSERT INTO ".Config::victims_table." (curseName, expireDate, user, numShards, crit) VALUES( ?, ?, ?, ?, ?)");
+		
 		if (strpos($curseType, "Surathli's") !== false)
 		{
 			$crit = '0';
@@ -85,12 +81,11 @@
 			die("Either the curses you entered weren't real or there was an issue parsing. :(");
 		}
 
-		$count = $count + 1;
 		//Check to see if this user is already in the database
 		if ($curseName == "SA")
 		{
 			//Check if already exists, else add
-			$stmt = $dbh->prepare("SELECT id FROM ". Config::db_table ." WHERE user = ? AND curseName = ?");
+			$stmt = $dbh->prepare("SELECT id FROM ". Config::victims_table ." WHERE user = ? AND curseName = ?");
 			$stmt->bindParam(1, $victim);
 			$stmt->bindParam(2, $curseName);
 
@@ -116,6 +111,7 @@
 		$insertStmt->bindParam(5, $crit);
 
 		$insertStmt->execute();
+		$count = $count + 1;
 	}
 
 	echo "Added ".$count." curse(s) successfully!";
