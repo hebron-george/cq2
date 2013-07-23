@@ -1,5 +1,5 @@
 <?
-	require('config.php');
+	require('../config.php');
 	if (isset($_POST['curses']))
 	{
 		//Read Input
@@ -59,56 +59,33 @@
 		{
 			$crit = '0';
 			$curseName = Config::SA;
-
-			$count = $count + 1;
 		}
 		else if (strpos($curseType, "Metamorphosis") !== false)
 		{
 			$crit = implode(" ", explode(" ", $m[1], -1));
 			$curseName = Config::META;
-
-			if ($crit === "")
-			{
-				die("There was an error parsing your data :( <br> <strong>Here: </strong>".$i);
-			}
-			$count = $count + 1;
 		}
 		else if (strpos($curseType, "Doppelganger") !== false)
 		{
 			$crit = implode(" ", explode(" ", $m[1], -1));
 			$curseName = Config::DOPPLE;
-
-			if ($crit === "")
-			{
-				die("There was an error parsing your data :( <br>Here: <strong>".$i."</strong><br>");
-			}
-			$count = $count + 1;
 		}
 		else if (strpos($curseType, "Jinx") !== false)
 		{
 			$crit = implode(" ", explode(" ", $m[1], -1));
 			$curseName = Config::JINX;
-			if ($crit === "")
-			{
-				die("There was an error parsing your data :( <br>Here: <strong>".$i."</strong><br>");
-			}
-			$count = $count + 1;
 		}
 		else if (strpos($curseType, "Suffocation") != false)
 		{
 			$crit = implode(" ", explode(" ", $m[1], -1));	
 			$curseName = Config::SUFFO;
-			if ($crit === "")
-			{
-				die("There was an error parsing your data :( <br>Here: <strong>".$i."</strong><br>");
-			}		
-			$count = $count + 1;
 		}
 		else
 		{
 			die("Either the curses you entered weren't real or there was an issue parsing. :(");
 		}
 
+		$count = $count + 1;
 		//Check to see if this user is already in the database
 		if ($curseName == "SA")
 		{
@@ -122,6 +99,13 @@
 			if ($data = $stmt->fetch())
 			{
 				die("This curse exists already. Contact an admin if you want to update or remove this curse: <strong>".$i."</strong>");
+			}
+		}
+		else
+		{
+			if ($crit === "")
+			{
+				die("There was an error parsing your data :( <br>Here: <strong>".$i."</strong><br>");
 			}
 		}
 

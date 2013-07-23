@@ -12,3 +12,11 @@ CREATE TABLE victims
 	crit TEXT,
 	PRIMARY KEY (id)
 );
+
+CREATE TABLE reveals
+(
+	id INT AUTO_INCREMENT,
+	user TEXT,
+	submissionDate DATETIME,
+	PRIMARY KEY (id)	
+);
