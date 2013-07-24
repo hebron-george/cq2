@@ -17,13 +17,26 @@
 	{
 		die($e->getMessage());
 	}
-
-	$stmt = $dbh->prepare("INSERT INTO ".Config::reveals_table." (user, list, submissionDate) VALUES (?, ?, NOW())");
-
+	$stmt = $dbh->prepare("SELECT COUNT(id) FROM ".Config::reveals_table." WHERE user=?");
 	$stmt->bindParam(1, $user);
-	$stmt->bindParam(2, $list);
-
 	$stmt->execute();
+	$result = $stmt->fetchAll();
+	if ($result[0][0] > 0)
+	{
+		$stmt = $dbh->prepare("UPDATE ".Config::reveals_table." SET submissionDate=NOW(), list='?' WHERE user='?'");
+		$stmt->bindParam(1, $list);
+		$stmt->bindParam(2, $user);
+		$stmt->execute();
+	}
+	else
+	{
+		$stmt = $dbh->prepare("INSERT INTO ".Config::reveals_table." (user, list, submissionDate) VALUES (?, ?, NOW())");
+		$stmt->bindParam(1, $user);
+		$stmt->bindParam(2, $list);
+
+		$stmt->execute();
+
+	}
 
 	die("Successfully submitted reveal for: ". $user);
 ?>
