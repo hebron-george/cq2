@@ -23,7 +23,7 @@
 	$result = $stmt->fetchAll();
 	if ($result[0][0] > 0)
 	{
-		$stmt = $dbh->prepare("UPDATE ".Config::reveals_table." SET submissionDate=NOW(), list='?' WHERE user='?'");
+		$stmt = $dbh->prepare("UPDATE ".Config::reveals_table." SET submissionDate=NOW(), list=? WHERE user=?");
 		$stmt->bindParam(1, $list);
 		$stmt->bindParam(2, $user);
 		$stmt->execute();
