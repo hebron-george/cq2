@@ -6,7 +6,7 @@
 	}
 
 	$user = htmlentities($_POST['user'], ENT_QUOTES);
-	$list = htmlentities(nl2br($_POST['list']), ENT_QUOTES);
+	$list = htmlentities($_POST['list'], ENT_QUOTES);
 
 	//Connect to database
 	try 
