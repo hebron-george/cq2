@@ -16,8 +16,9 @@ CREATE TABLE victims
 CREATE TABLE reveals
 (
 	id INT AUTO_INCREMENT,
-	user TEXT,
-	list TEXT,
-	submissionDate DATETIME,
+	user TEXT NOT NULL,
+	list TEXT NOT NULL,
+	submissionDate DATETIME NOT NULL,
+	client_IP INT NOT NULL,
 	PRIMARY KEY (id)	
 );
