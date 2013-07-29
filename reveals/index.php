@@ -99,7 +99,7 @@
 
 		<h2>Submit a Reveal</h2>
 		<br>
-		<form action="reveal.php" method="POST">
+		<form action="" method="POST">
 			Mage: 
 			<br>
 			<input id="user" class="textbox" name="user" type="text"></input>
@@ -110,7 +110,7 @@
 			<br>
 			<input type="submit"></input>
 		</form>
-		
+
 		</center>
 	</body>
 
