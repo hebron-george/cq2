@@ -1,41 +1,49 @@
 <html>
 	<head>
+		<?
+			require('../config.php');
+
+			//Test if it is a shared client
+			if (!empty($_SERVER['HTTP_CLIENT_IP']))
+			{
+				$ip=$_SERVER['HTTP_CLIENT_IP'];
+			}
+			elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
+			{
+				//Is it a proxy address
+				$ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+			} 
+			else
+			{
+				$ip=$_SERVER['REMOTE_ADDR'];
+			}
+
+			//The value of $ip at this point would look something like: "192.0.34.166"
+			$ip = ip2long($ip);
+			//The $ip would now look something like: 1073732954
+			$user_agent = $_SERVER['HTTP_USER_AGENT'];
+			$page = Config::REVEAL_INDEX;
+
+			//Connect to database
+			try 
+			{
+				$dbh = new PDO("mysql:host=".Config::db_host.";dbname=".Config::db_name, Config::db_user, Config::db_pass);
+			}
+			catch(PDOException $e)
+			{
+				die($e->getMessage());
+			}
+
+			$stmt = $dbh->prepare("INSERT INTO ".Config::visitor_stats." (client_IP, user_agent, visited_time, visited_page) VALUES (?, ?, NOW(), ?)");
+			$stmt->bindParam(1, $ip);
+			$stmt->bindParam(2, $user_agent);
+			$stmt->bindParam(3, $page);
+
+			$stmt->execute();
+		?>
 		<title>Reveals Submission</title>
 		<link rel="stylesheet" type="text/css" href="reveals.css">
 	</head>
-<?
-	require('../config.php');
-
-	//Connect to database
-	try 
-	{
-		$dbh = new PDO("mysql:host=".Config::db_host.";dbname=".Config::db_name, Config::db_user, Config::db_pass);
-	}
-	catch(PDOException $e)
-	{
-		die($e->getMessage());
-	}
-
-	//Test if it is a shared client
-	if (!empty($_SERVER['HTTP_CLIENT_IP']))
-	{
-		$ip=$_SERVER['HTTP_CLIENT_IP'];
-
-	}
-	elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
-	{
-		//Is it a proxy address
-		$ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
-	} 
-	else
-	{
-		$ip=$_SERVER['REMOTE_ADDR'];
-	}
-
-	//The value of $ip at this point would look something like: "192.0.34.166"
-	$ip = ip2long($ip);
-	//The $ip would now look something like: 1073732954
-?>
 
 	<body>
 		<?
@@ -76,21 +84,21 @@
 		<center>		
 		<div id="subUsers">
 		<br>
-		<h2> Submitted Users </h2>
+		<h2>Recently Submitted Users </h2>
 		<br>
 		<?
-			$stmt = $dbh->prepare("SELECT user FROM reveals");
+			$stmt = $dbh->prepare("SELECT user, submissionDate FROM reveals ORDER BY id DESC LIMIT 5");
 			$stmt->execute();
 
 			$result = $stmt->fetchAll();
+		    $currentDate = date('Y-m-d H:i:s');
 
 			for($i = 0; $i < count($result); $i++)
 			{
-				echo '<a href="http://hebrongeorge.com/cq2/reveals/findReveal.php?user='.$result[$i]['user'].'">'.$result[$i]['user'].'</a><br>';
+				$submissionDate = $result[$i]['submissionDate'];
+		    	$days = floor((strtotime($currentDate) - strtotime($submissionDate))/(60*60*24));
+				echo '<a href="./findReveal.php?user='.$result[$i]['user'].'">'.$result[$i]['user']." - $days days old".'</a><br>';
 			}
-
-			//foreach($result[0]['user'] as $i)
-			//	echo $i."<br>";
 		?>
 		</div>
 
