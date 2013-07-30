@@ -1,5 +1,5 @@
 <?php
-	require('config.php');
+	require('../config.php');
 
 
 	//Connect to database
@@ -28,7 +28,7 @@
 	}
 
 	$width = 1024;
-	$height = 20 * $rows;
+	$height = 20 * $rows + 100;
 	$my_img = imagecreate( $width, $height );
 	$background = imagecolorallocate( $my_img, 0, 0, 0 );
 	$text_colour = imagecolorallocate( $my_img, 255,100,000 );
