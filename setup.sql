@@ -22,3 +22,13 @@ CREATE TABLE reveals
 	client_IP INT NOT NULL,
 	PRIMARY KEY (id)	
 );
+
+CREATE TABLE visitorStats
+(
+	id INT AUTO_INCREMENT,
+	client_IP INT NOT NULL,
+	user_agent TEXT NOT NULL,
+	visited_time DATETIME NOT NULL,
+	visited_page TEXT NOT NULL,
+	PRIMARY KEY (id)	
+);
