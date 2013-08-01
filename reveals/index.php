@@ -42,18 +42,21 @@
 			$stmt->execute();
 		?>
 		<title>Reveals Submission</title>
-		<link rel="stylesheet" type="text/css" href="reveals.css">
+		<link rel="stylesheet" type="text/css" href="../main.css">
 	</head>
 
 	<body>
 		<?
-
-			if (isset($_POST['sublist']) && isset($_POST['user']) && strlen($_POST['sublist']) > 0 && strlen($_POST['user']) > 0)
+			include("../menu.php");
+			if (isset($_POST['sublist']) && isset($_POST['user']) && isset($_POST['userLevel']) && strlen($_POST['sublist']) > 0 && strlen($_POST['user']) > 0 && strlen($_POST['userLevel']) > 0)
 			{
 				
-				$user = htmlentities($_POST['user'], ENT_QUOTES);
+				$user = trim(htmlentities($_POST['user'], ENT_QUOTES));
 				$list = htmlentities($_POST['sublist'], ENT_QUOTES);
+				$userLevel = trim(htmlentities($_POST['userLevel'], ENT_QUOTES));
 
+				if (!is_int(intval($userLevel)))
+					$userLevel = 0;
 
 				$stmt = $dbh->prepare("SELECT COUNT(id) FROM ".Config::reveals_table." WHERE user=?");
 				$stmt->bindParam(1, $user);
@@ -61,18 +64,21 @@
 				$result = $stmt->fetchAll();
 				if ($result[0][0] > 0)
 				{
-					$stmt = $dbh->prepare("UPDATE ".Config::reveals_table." SET submissionDate=NOW(), list=?, client_IP=? WHERE user=?");
+					echo "user level: $userLevel";
+					$stmt = $dbh->prepare("UPDATE ".Config::reveals_table." SET submissionDate=NOW(), list=?, client_IP=?, userLevel=? WHERE user=?");
 					$stmt->bindParam(1, $list);
 					$stmt->bindParam(2, $ip);
-					$stmt->bindParam(3, $user);
+					$stmt->bindParam(3, $userLevel);
+					$stmt->bindParam(4, $user);
 					$stmt->execute();
 				}
 				else
 				{
-					$stmt = $dbh->prepare("INSERT INTO ".Config::reveals_table." (user, list, submissionDate, client_IP) VALUES (?, ?, NOW(), ?)");
+					$stmt = $dbh->prepare("INSERT INTO ".Config::reveals_table." (user, list, submissionDate, client_IP, userLevel) VALUES (?, ?, NOW(), ?, ?)");
 					$stmt->bindParam(1, $user);
 					$stmt->bindParam(2, $list);
 					$stmt->bindParam(3, $ip);
+					$stmt->bindParam(4, $userLevel);
 
 					$stmt->execute();
 
@@ -87,7 +93,7 @@
 		<h2>Recently Submitted Users </h2>
 		<br>
 		<?
-			$stmt = $dbh->prepare("SELECT user, submissionDate FROM reveals ORDER BY id DESC LIMIT 5");
+			$stmt = $dbh->prepare("SELECT user, userLevel, submissionDate FROM reveals ORDER BY id DESC LIMIT 5");
 			$stmt->execute();
 
 			$result = $stmt->fetchAll();
@@ -97,11 +103,11 @@
 			{
 				$submissionDate = $result[$i]['submissionDate'];
 		    	$days = floor((strtotime($currentDate) - strtotime($submissionDate))/(60*60*24));
-				echo '<a href="./findReveal.php?user='.$result[$i]['user'].'">'.$result[$i]['user']." - $days days old".'</a><br>';
+				echo '<a href="./findReveal.php?user='.$result[$i]['user'].'">('.$result[$i]['userLevel'].') '.$result[$i]['user']." - $days days old".'</a><br>';
 			}
 		?>
 		</div>
-
+		<br>
 		<h2>Find a Reveal</h2>
 		<a href="findReveal.php">Looking for a reveal?</a>
 
@@ -111,6 +117,10 @@
 			Mage: 
 			<br>
 			<input id="user" class="textbox" name="user" type="text"></input>
+			<br>
+			Level:
+			<br>
+			<input id="userLevel" class="textbox" name="userLevel" type="text" maxlength="2"></input>
 			<br>
 			List: 
 			<br>
