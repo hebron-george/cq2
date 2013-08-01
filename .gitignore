@@ -12,3 +12,5 @@ Thumbs.db
 ################
 *.config
 *.properties
+
+config.php
