@@ -1,10 +1,10 @@
 <?
 	class Config
 	{
-		const db_host = 'localhost';
-		const db_user = 'vashy_one';
-		const db_pass = '7_qq}QnpuPe!';
-		const db_name = 'vashy_cq2';
+		const db_host = '';
+		const db_user = '';
+		const db_pass = '';
+		const db_name = '';
 
 		const victims_table = 'victims';
 		const reveals_table = 'reveals';
