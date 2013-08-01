@@ -4,6 +4,7 @@
 		<link rel="stylesheet" type="text/css" href="../main.css">		
 		<?
 			require('../config.php');
+			include("../menu.php");
 			//Connect to database
 			try 
 			{
@@ -159,6 +160,7 @@
 				}
 
 			?>
+			<br>
 			<h2>Active Curses:</h2><br>
 			Active Curses can be found <a href="image.php">HERE</a> 
 			<form name="curseForm" action="" method="POST">

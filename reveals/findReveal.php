@@ -5,7 +5,7 @@
 <html>
 	<head>
 		<title>Find a Reveal</title>
-		<link rel="stylesheet" type="text/css" href="reveals.css">
+		<link rel="stylesheet" type="text/css" href="../main.css">
 		<?
 			//Connect to database
 			try 
@@ -48,9 +48,14 @@
 	</head>
 
 	<body> 
+		<?
+			include("../menu.php");
+		?>
 		<form action="findReveal.php" method="GET">
 			User:
-			<input type="text" id="user" name="user"></input>
+			<input type="text" id="user" name="user"></input> [OR]
+			Level:
+			<input type="text" id="level" name="level"></input>
 			<br>
 			<input type="submit"></input>
 		</form>
@@ -61,7 +66,7 @@
 						$user = htmlentities($_GET['user'], ENT_QUOTES);
 
 
-						$stmt = $dbh->prepare("SELECT list, submissionDate FROM ".Config::reveals_table." WHERE user = ?");
+						$stmt = $dbh->prepare("SELECT list, submissionDate, userLevel FROM ".Config::reveals_table." WHERE user = ?");
 						$stmt->bindParam(1, $user);
 
 						$stmt->execute();
@@ -69,17 +74,22 @@
 						$result = $stmt->fetchAll();
 					    $currentDate = date('Y-m-d H:i:s');
 					    $submissionDate = $result[0]['submissionDate'];
+					    $userLevel = $result[0]['userLevel'];
 
 					    if (isset($submissionDate) && isset($result[0][0]))
 					    {
 					    	$days = floor((strtotime($currentDate) - strtotime($submissionDate))/(60*60*24));
-							echo "<h2>".html_entity_decode($user)."</h2>This reveal is $days days old.<br>";
+							echo "<h2>".html_entity_decode($user)." - ".$userLevel."</h2>This reveal is $days days old.<br>";
 							echo nl2br(htmlspecialchars($result[0][0], ENT_QUOTES, 'UTF-8'));
 						}
 						else
 						{
 							echo "<h2>There is no result for user: ".html_entity_decode($user)."</h2>";
 						}
+					}
+					else if (isset($_GET['level']) && $_GET['level'] !== "")
+					{
+
 					}
 
 				?>
