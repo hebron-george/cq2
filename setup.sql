@@ -18,6 +18,7 @@ CREATE TABLE reveals
 	id INT AUTO_INCREMENT,
 	user TEXT NOT NULL,
 	list TEXT NOT NULL,
+	userLevel TINYINT NOT NULL,
 	submissionDate DATETIME NOT NULL,
 	client_IP INT NOT NULL,
 	PRIMARY KEY (id)	
