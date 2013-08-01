@@ -1,10 +1,10 @@
 <?
 	class Config
 	{
-		const db_host = '';
-		const db_user = '';
-		const db_pass = '';
-		const db_name = '';
+		const db_host = 'test';
+		const db_user = 'test';
+		const db_pass = 'test';
+		const db_name = 'test';
 
 		const victims_table = 'victims';
 		const reveals_table = 'reveals';
