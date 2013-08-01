@@ -11,6 +11,13 @@ h1, h2, h3, h4, h5
 	text-align: center;
 }
 
+#bannerImg
+{
+	background-image: url("http://hebrongeorge.com/siralim/fallout/images/blue/header_left.gif");
+	width: 296px;
+	height: 87px;
+}
+
 #list
 {
    margin-left: auto;
@@ -25,12 +32,19 @@ h1, h2, h3, h4, h5
 #subUsers
 {
 	position:absolute;
-	top: 0;
-	left:0;
 	padding-left: 10px;
 }
 
 .textbox
 {
 	background-color: gray; /*rgb(76, 135, 237); */
+}
+
+.menu-item
+{
+	float: right;
+    padding-left:10px;
+    padding-right:10px;
+    background-color: gray;
+    border: dotted;	
 }
