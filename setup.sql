@@ -4,7 +4,7 @@ USE cq2_oxidian;
 
 CREATE TABLE victims
 (
-	id INT AUTO_INCREMENT,
+	id INT NOT NULL AUTO_INCREMENT,
 	curseName TEXT,
 	expireDate DATETIME,
 	user TEXT,
@@ -15,7 +15,7 @@ CREATE TABLE victims
 
 CREATE TABLE reveals
 (
-	id INT AUTO_INCREMENT,
+	id INT NOT NULL AUTO_INCREMENT,
 	user TEXT NOT NULL,
 	list TEXT NOT NULL,
 	userLevel TINYINT NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE reveals
 
 CREATE TABLE shards
 (
-	id INT AUTO_INCREMENT,
+	id INT NOT NULL AUTO_INCREMENT,
 	shard TEXT NOT NULL,
 	user TEXT NOT NULL,
 	amount INT NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE shards
 
 CREATE TABLE visitorStats
 (
-	id INT AUTO_INCREMENT,
+	id INT NOT NULL AUTO_INCREMENT,
 	client_IP INT NOT NULL,
 	user_agent TEXT NOT NULL,
 	visited_time DATETIME NOT NULL,
@@ -44,3 +44,11 @@ CREATE TABLE visitorStats
 	PRIMARY KEY (id)	
 );
 
+CREATE TABLE users 
+(
+    id INT NOT NULL AUTO_INCREMENT,
+    username VARCHAR(30) NOT NULL UNIQUE,
+    password VARCHAR(64) NOT NULL,
+    salt VARCHAR(3) NOT NULL,
+    PRIMARY KEY(id)
+);
