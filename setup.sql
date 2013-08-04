@@ -24,6 +24,16 @@ CREATE TABLE reveals
 	PRIMARY KEY (id)	
 );
 
+CREATE TABLE shards
+(
+	id INT AUTO_INCREMENT,
+	shard TEXT NOT NULL,
+	user TEXT NOT NULL,
+	amount INT NOT NULL,
+	submissionDate DATETIME NOT NULL,
+	PRIMARY KEY (id)
+);
+
 CREATE TABLE visitorStats
 (
 	id INT AUTO_INCREMENT,
@@ -33,3 +43,4 @@ CREATE TABLE visitorStats
 	visited_page TEXT NOT NULL,
 	PRIMARY KEY (id)	
 );
+
