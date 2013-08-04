@@ -89,7 +89,6 @@
 		?>
 		<center>		
 		<div id="subUsers">
-		<br>
 		<h2>Recently Submitted Users </h2>
 		<br>
 		<?
@@ -109,7 +108,9 @@
 		</div>
 		<br>
 		<h2>Find a Reveal</h2>
-		<a href="findReveal.php">Looking for a reveal?</a>
+		<a href="findReveal.php">Looking for a specific reveal?</a>
+		<br>
+		<a href="allReveals.php">Looking for all reveals?</a>
 
 		<h2>Submit a Reveal</h2>
 		<br>
