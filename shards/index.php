@@ -59,14 +59,20 @@
 
 				$lines = explode(PHP_EOL, $shards);
 
-				$pattern = "(.+),.+(d+)";
+				$pattern = "/(.+),.+\((.+)\)/";
 				foreach($lines as $i)
 				{
 					preg_match($pattern, $i, $m);
 
-					$shard = $m[1];
-					echo $shard."<br>";
-					//$stmt = $dbh->prepare("INSERT INTO ".Config::shards_table." (user, shard, amount, submissionDate) VALUES (?, ?, ?, NOW())")
+					$shard = trim($m[1]);
+					$amount = trim($m[2]);
+
+					$stmt = $dbh->prepare("INSERT INTO ".Config::shards_table." (user, shard, amount, submissionDate) VALUES (?, ?, ?, NOW())");
+					$stmt->bindParam(1, $user);
+					$stmt->bindParam(2, $shard);
+					$stmt->bindParam(3, $amount);
+
+					$stmt->execute();
 				}
 			}
 		?>
