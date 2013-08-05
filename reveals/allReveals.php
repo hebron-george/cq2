@@ -51,12 +51,13 @@
 	<body>
 		<div id="list">
 		<?
-			$stmt = $dbh->prepare('SELECT list, submissionDate, userLevel FROM '.Config::reveals_table.' ORDER BY submissionDate DESC');
+			$stmt = $dbh->prepare('SELECT user, userLevel FROM '.Config::reveals_table.' ORDER BY submissionDate DESC');
 			$stmt->execute();
 
 			$result = $stmt->fetchAll();
-
-			print_r($result);
+			for ($i = 0; $i < count($result); $i++)
+				echo '<a href="findReveal.php?user='.$result[$i]['user'].'" >'.$result[$i]['user']." - Level ".$result[$i]['userLevel'].'</a><br>';
+			
 		?>
 		</div>
 	</body>
