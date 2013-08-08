@@ -59,7 +59,7 @@
 
 				$lines = explode(PHP_EOL, $shards);
 
-				$pattern = "/(.+),.+\((.+)\)/";
+				$pattern = "/(.+) Shard,.+\((.+)\)/";
 				foreach($lines as $i)
 				{
 					preg_match($pattern, $i, $m);
