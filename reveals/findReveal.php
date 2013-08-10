@@ -261,6 +261,19 @@
 						}
 					}
 
+					if ($_GET['user'] !== "" || $_GET['level'] !== "" || $_GET['crit'] !== "")
+					{
+						$search = "user=".$_GET['user'].'&level='.$_GET['level'].'&crit='.$_GET['crit'];
+						$stmt = $dbh->prepare("INSERT INTO ".Config::searches_table." (client_IP, search, submissionDate, visited_page) VALUES (?, ?, ?, ?)");
+						$stmt->bindParam(1, $ip);
+						$stmt->bindParam(2, $search);
+						$stmt->bindParam(3, $currentDate);
+						$page = Config::REVEAL_FIND;
+						$stmt->bindParam(4, $page);
+
+						$stmt->execute();
+					}
+
 				?>
 		</div>
 
