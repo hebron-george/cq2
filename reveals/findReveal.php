@@ -225,7 +225,7 @@
 							{
 					   			$submissionDate = $result[$i]['submissionDate'];
 					    		$days = floor((strtotime($currentDate) - strtotime($submissionDate))/(60*60*24));
-								echo '<a href="findReveal.php?user='.$result[$i]['user'].'">'.$result[$i]['user'].' - Level '.$result[$i]['userLevel'].' - '.$days.' old<br>';								
+								echo '<a href="findReveal.php?user='.$result[$i]['user'].'">'.$result[$i]['user'].' - Level '.$result[$i]['userLevel'].' - '.$days.' days old<br>';								
 							}
 						}
 						else
@@ -252,7 +252,7 @@
 							{
 					   			$submissionDate = $result[$i]['submissionDate'];
 					    		$days = floor((strtotime($currentDate) - strtotime($submissionDate))/(60*60*24));
-								echo '<a href="findReveal.php?user='.$result[$i]['user'].'">'.$result[$i]['user'].' - Level '.$result[$i]['userLevel'].' - '.$days.' old<br>';
+								echo '<a href="findReveal.php?user='.$result[$i]['user'].'">'.$result[$i]['user'].' - Level '.$result[$i]['userLevel'].' - '.$days.' days old<br>';
 							}
 						}
 						else
