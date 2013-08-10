@@ -167,7 +167,7 @@
 					    	echo '<h2>Users</h2>';
 					    	for ($i = 0; $i < count($result); $i++)
 						    {
-							    if (isset($submissionDate) && isset($result[$i]['user']))
+							    if (count($result) > 0)
 							    {
 					    			$submissionDate = $result[$i]['submissionDate'];
 							    	$days = floor((strtotime($currentDate) - strtotime($submissionDate))/(60*60*24));
