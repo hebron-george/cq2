@@ -10,6 +10,8 @@ Reveals
 =======
 Users can submit reveals of players' lists within CQ2.
 
+Potential targets can be found using the given filter or by browsing through all submitted reveals.
+
 
 Curses
 ======
