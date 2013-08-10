@@ -20,7 +20,7 @@ CREATE TABLE reveals
 	list TEXT NOT NULL,
 	userLevel TINYINT NOT NULL,
 	submissionDate DATETIME NOT NULL,
-	client_IP INT NOT NULL,
+	client_IP BIGINT NOT NULL,
 	PRIMARY KEY (id)	
 );
 
@@ -37,7 +37,7 @@ CREATE TABLE shards
 CREATE TABLE visitorStats
 (
 	id INT NOT NULL AUTO_INCREMENT,
-	client_IP INT NOT NULL,
+	client_IP BIGINT NOT NULL,
 	user_agent TEXT NOT NULL,
 	visited_time DATETIME NOT NULL,
 	visited_page TEXT NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE searches
 (
 	id INT NOT NULL AUTO_INCREMENT,
 	search TEXT NOT NULL,
-	client_IP INT NOT NULL,
+	client_IP BIGINT NOT NULL,
 	submissionDate DATETIME NOT NULL,
 	visited_page TEXT NOT NULL,
 	PRIMARY KEY(id)
