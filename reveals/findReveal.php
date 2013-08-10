@@ -58,7 +58,7 @@
 			Level:
 			<input type="text" id="level" name="level"></input> <br>
 			List Search: 
-			<input type="text" id="crit" name="crit"></input>
+			<input type="text" id="crit" name="crit"></input> (Ex: 'Death', 'Dragon', 'Rancid Imling', etc)
 			<br>
 			<input type="submit"></input>
 		</form>
