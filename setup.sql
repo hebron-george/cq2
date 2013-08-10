@@ -52,3 +52,13 @@ CREATE TABLE users
     salt VARCHAR(3) NOT NULL,
     PRIMARY KEY(id)
 );
+
+CREATE TABLE searches
+(
+	id INT NOT NULL AUTO_INCREMENT,
+	search TEXT NOT NULL,
+	client_IP INT NOT NULL,
+	submissionDate DATETIME NOT NULL,
+	visited_page TEXT NOT NULL,
+	PRIMARY KEY(id)
+);
