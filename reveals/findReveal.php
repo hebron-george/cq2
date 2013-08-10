@@ -161,7 +161,6 @@
 
 						$stmt->execute();
 						$result = $stmt->fetchAll();
-					    $submissionDate = $result[0]['submissionDate'];
 
 					    if (count($result) > 0)
 					    {
@@ -170,6 +169,7 @@
 						    {
 							    if (isset($submissionDate) && isset($result[$i]['user']))
 							    {
+					    			$submissionDate = $result[$i]['submissionDate'];
 							    	$days = floor((strtotime($currentDate) - strtotime($submissionDate))/(60*60*24));
 							    	$user = $result[$i]['user'];
 									echo '<a href="findReveal.php?user='.htmlspecialchars($user).'">'.$user.'</a> - '.$days.' days old<br>';
