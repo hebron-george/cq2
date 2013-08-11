@@ -71,7 +71,7 @@
 						$level = htmlentities($_GET['level'], ENT_QUOTES);
 						$crit = htmlentities($_GET['crit'], ENT_QUOTES);
 
-						$stmt = $dbh->prepare("SELECT list, submissionDate, userLevel FROM ".Config::reveals_table." WHERE user = ? AND userLevel = ? AND list LIKE ?");
+						$stmt = $dbh->prepare("SELECT list, submissionDate, userLevel FROM ".Config::reveals_table." WHERE user = ? AND userLevel = ? AND list LIKE ? ORDER BY submissionDate DESC");
 
 						$stmt->bindParam(1, $user);
 						$stmt->bindParam(2, $level);
@@ -99,7 +99,7 @@
 						$user = htmlentities($_GET['user'], ENT_QUOTES);
 						$level = htmlentities($_GET['level'], ENT_QUOTES);
 
-						$stmt = $dbh->prepare("SELECT list, submissionDate, userLevel FROM ".Config::reveals_table." WHERE user = ? AND userLevel = ?");
+						$stmt = $dbh->prepare("SELECT list, submissionDate, userLevel FROM ".Config::reveals_table." WHERE user = ? AND userLevel = ? ORDER BY submissionDate DESC");
 
 						$stmt->bindParam(1, $user);
 						$stmt->bindParam(2, $level);
@@ -126,7 +126,7 @@
 						$user = htmlentities($_GET['user'], ENT_QUOTES);
 						$crit = htmlentities($_GET['crit'], ENT_QUOTES);
 
-						$stmt = $dbh->prepare("SELECT list, submissionDate, userLevel FROM ".Config::reveals_table." WHERE user = ? AND list LIKE ?");
+						$stmt = $dbh->prepare("SELECT list, submissionDate, userLevel FROM ".Config::reveals_table." WHERE user = ? AND list LIKE ? ORDER BY submissionDate DESC");
 
 						$stmt->bindParam(1, $user);
 						$crit = '%'.$crit.'%';
@@ -153,7 +153,7 @@
 						$level = htmlentities($_GET['level'], ENT_QUOTES);
 						$crit = htmlentities($_GET['crit'], ENT_QUOTES);
 
-						$stmt = $dbh->prepare("SELECT user, submissionDate FROM ".Config::reveals_table." WHERE userLevel = ? AND list LIKE ?");
+						$stmt = $dbh->prepare("SELECT user, submissionDate FROM ".Config::reveals_table." WHERE userLevel = ? AND list LIKE ? ORDER BY submissionDate DESC");
 
 						$stmt->bindParam(1, $level);
 						$crit = '%'.$crit.'%';
@@ -187,7 +187,7 @@
 						$user = htmlentities($_GET['user'], ENT_QUOTES);
 
 
-						$stmt = $dbh->prepare("SELECT list, submissionDate, userLevel FROM ".Config::reveals_table." WHERE user = ?");
+						$stmt = $dbh->prepare("SELECT list, submissionDate, userLevel FROM ".Config::reveals_table." WHERE user = ? ORDER BY submissionDate DESC");
 						$stmt->bindParam(1, $user);
 
 						$stmt->execute();
@@ -211,7 +211,7 @@
 					{
 						$level = htmlentities($_GET['level'], ENT_QUOTES);
 
-						$stmt = $dbh->prepare("SELECT user, submissionDate, userLevel FROM ".Config::reveals_table." WHERE userLevel = ?");
+						$stmt = $dbh->prepare("SELECT user, submissionDate, userLevel FROM ".Config::reveals_table." WHERE userLevel = ? ORDER BY submissionDate DESC");
 
 						$stmt->bindParam(1, $level);
 
@@ -237,7 +237,7 @@
 					{
 						$crit = htmlentities($_GET['crit'], ENT_QUOTES);
 
-						$stmt = $dbh->prepare("SELECT user, submissionDate, userLevel FROM ".Config::reveals_table." WHERE list LIKE ? ORDER BY id DESC");
+						$stmt = $dbh->prepare("SELECT user, submissionDate, userLevel FROM ".Config::reveals_table." WHERE list LIKE ? ORDER BY submissionDate DESC");
 
 						$crit = '%'.$crit.'%';
 						$stmt->bindParam(1, $crit);
