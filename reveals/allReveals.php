@@ -1,3 +1,12 @@
+<?
+
+			require('../session_functions.php');
+			if(!isLoggedIn())
+			{
+				header('Location: ../login.php');
+				die();
+			}
+?>
 <html>
 	<head>
 		<?

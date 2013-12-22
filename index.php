@@ -1,3 +1,11 @@
+<?
+	require("session_functions.php");
+	if(!isLoggedIn())
+	{
+		header('Location: login.php');
+		die();
+	}
+?>
 <html>
 	<head>
 		<title>Castle Quest 2 Tools</title>
