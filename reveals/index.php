@@ -92,7 +92,7 @@
 		<h2>Recently Submitted Users </h2>
 		<br>
 		<?
-			$stmt = $dbh->prepare("SELECT user, userLevel, submissionDate FROM reveals ORDER BY id DESC LIMIT 5");
+			$stmt = $dbh->prepare("SELECT user, userLevel, submissionDate FROM reveals ORDER BY submissionDate DESC LIMIT 5");
 			$stmt->execute();
 
 			$result = $stmt->fetchAll();
