@@ -10,6 +10,7 @@ CREATE TABLE victims
 	user TEXT,
 	numShards INT,
 	crit TEXT,
+	lastUpdateUser TEXT,
 	PRIMARY KEY (id)
 );
 
@@ -21,6 +22,7 @@ CREATE TABLE reveals
 	userLevel TINYINT NOT NULL,
 	submissionDate DATETIME NOT NULL,
 	client_IP BIGINT NOT NULL,
+	lastUpdateUser TEXT,
 	PRIMARY KEY (id)	
 );
 
@@ -31,6 +33,7 @@ CREATE TABLE shards
 	user TEXT NOT NULL,
 	amount INT NOT NULL,
 	submissionDate DATETIME NOT NULL,
+	lastUpdateUser TEXT,
 	PRIMARY KEY (id)
 );
 
@@ -41,6 +44,7 @@ CREATE TABLE visitorStats
 	user_agent TEXT NOT NULL,
 	visited_time DATETIME NOT NULL,
 	visited_page TEXT NOT NULL,
+	username TEXT,
 	PRIMARY KEY (id)	
 );
 
@@ -60,5 +64,6 @@ CREATE TABLE searches
 	client_IP BIGINT NOT NULL,
 	submissionDate DATETIME NOT NULL,
 	visited_page TEXT NOT NULL,
+	username TEXT,
 	PRIMARY KEY(id)
 );
