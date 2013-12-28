@@ -1,11 +1,10 @@
 <?
-
-			require('../session_functions.php');
-			if(!isLoggedIn())
-			{
-				header('Location: ../login.php');
-				die();
-			}
+	require('../session_functions.php');
+	if(!isLoggedIn())
+	{
+		header('Location: ../login.php');
+		die();
+	}
 ?>
 <html>
 	<head>
@@ -43,10 +42,11 @@
 				die($e->getMessage());
 			}
 
-			$stmt = $dbh->prepare("INSERT INTO ".Config::visitor_stats." (client_IP, user_agent, visited_time, visited_page) VALUES (?, ?, NOW(), ?)");
+			$stmt = $dbh->prepare("INSERT INTO ".Config::visitor_stats." (client_IP, user_agent, visited_time, visited_page, username) VALUES (?, ?, NOW(), ?, ?)");
 			$stmt->bindParam(1, $ip);
 			$stmt->bindParam(2, $user_agent);
 			$stmt->bindParam(3, $page);
+			$stmt->bindParam(4, $_SESSION['username']);
 
 			$stmt->execute();
 		?>
@@ -59,7 +59,8 @@
 			include("../menu.php");
 			if (isset($_POST['sublist']) && isset($_POST['user']) && isset($_POST['userLevel']) && strlen($_POST['sublist']) > 0 && strlen($_POST['user']) > 0 && strlen($_POST['userLevel']) > 0)
 			{
-				
+				/* Adding reveal to the database here */
+
 				$user = trim(htmlentities($_POST['user'], ENT_QUOTES));
 				$list = htmlentities($_POST['sublist'], ENT_QUOTES);
 				$userLevel = trim(htmlentities($_POST['userLevel'], ENT_QUOTES));
@@ -74,20 +75,22 @@
 				if ($result[0][0] > 0)
 				{
 					echo "user level: $userLevel";
-					$stmt = $dbh->prepare("UPDATE ".Config::reveals_table." SET submissionDate=NOW(), list=?, client_IP=?, userLevel=? WHERE user=?");
+					$stmt = $dbh->prepare("UPDATE ".Config::reveals_table." SET submissionDate=NOW(), list=?, client_IP=?, userLevel=? lastUpdateUser=? WHERE user=?");
 					$stmt->bindParam(1, $list);
 					$stmt->bindParam(2, $ip);
 					$stmt->bindParam(3, $userLevel);
-					$stmt->bindParam(4, $user);
+					$stmt->bindParam(4, $_SESSION['username']);
+					$stmt->bindParam(5, $user);
 					$stmt->execute();
 				}
 				else
 				{
-					$stmt = $dbh->prepare("INSERT INTO ".Config::reveals_table." (user, list, submissionDate, client_IP, userLevel) VALUES (?, ?, NOW(), ?, ?)");
+					$stmt = $dbh->prepare("INSERT INTO ".Config::reveals_table." (user, list, submissionDate, client_IP, userLevel, lastUpdateUser) VALUES (?, ?, NOW(), ?, ?, ?)");
 					$stmt->bindParam(1, $user);
 					$stmt->bindParam(2, $list);
 					$stmt->bindParam(3, $ip);
 					$stmt->bindParam(4, $userLevel);
+					$stmt->bindParam(5, $_SESSION['username']);
 
 					$stmt->execute();
 
