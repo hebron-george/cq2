@@ -17,7 +17,7 @@
 
 		if (sizeof($result) < 1)
 		{
-			echo "Could not find user: $username";
+			echo "Invalid username/password combination. <br>";
 		}
 		else
 		{
@@ -71,12 +71,13 @@
 			$user_agent = $_SERVER['HTTP_USER_AGENT'];
 			$page = Config::LOGIN;
 
-			$stmt = $dbh->prepare("INSERT INTO ".Config::visitor_stats." (client_IP, user_agent, visited_time, visited_page) VALUES (?, ?, NOW(), ?)");
+			$stmt = $dbh->prepare("INSERT INTO ".Config::visitor_stats." (client_IP, user_agent, visited_time, visited_page, username) VALUES (?, ?, NOW(), ?, ?)");
 			$stmt->bindParam(1, $ip);
 			$stmt->bindParam(2, $user_agent);
 			$stmt->bindParam(3, $page);
+			$stmt->bindParam(4, $_SESSION['username']);
 
-			$stmt->execute();		
+			$stmt->execute();
 	}
 ?>
 
